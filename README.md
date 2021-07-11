@@ -17,3 +17,5 @@ Provided driver from the CD is 32-bit hence it will only work on 32-bit Windows.
 It has been tested on 32-bit Windows 10. Simply install through Device Manager.
 
 A video player like VLC can then be used to open the Capture Device.
+
+The software in `setup.exe` is unnecessary as it seems like a Photo Album manager and I could not get it to work.
