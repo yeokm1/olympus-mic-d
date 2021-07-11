@@ -1,0 +1,174 @@
+;
+; M01USB.INF  -- This file contains installation information 
+; for Olympus Microscope Digital Camera System
+;             
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+signature="$CHICAGO$"
+
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+
+Provider=%SWMfg%
+DriverVer=12/28/2001,2.1.12.28 
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%HWMfg%=OVT
+ 
+[DestinationDirs]
+DefaultDestDir = 11
+OVT.USBDCam511P.Files = 10,System32\Drivers
+OVT.USBDCam511P.2000= 10,System32\Drivers
+OVT.Setting.CopyFiles = 10,OvtCam
+
+[OVT]
+%USB\VID_05A9&PID_A511.DeviceDesc%=OVT.USBDCam511P,USB\VID_05A9&PID_A511
+
+[OVT.USBDCam511P]
+Include=    ks.inf, kscaptur.inf, ksfilter.inf
+Needs=      KS.Registration,KSCAPTUR.Registration
+
+Capabilities=1
+ICMProfiles="sRGB Color Space Profile.icm"
+UpdateInis= OVT.USBDCam511P.Links
+AddReg=OVT.USBDCam511P.AddReg, OVT.USBDCam511P.BasicSetting, OVT.511P.AddReg
+CopyFiles=OVT.STI.CopyFiles, OVT.Setting.CopyFiles, OVT.USBDCam511P.Files
+
+[OVT.USBDCam511P.NT]
+Include=    ks.inf, kscaptur.inf, ksfilter.inf
+Needs=      KS.Registration,KSCAPTUR.Registration.NT
+
+Capabilities=1
+AddReg=OVT.USBDCam511P.AddReg, OVT.USBDCam511P.BasicSetting, OVT.511P.AddReg, OVT.2000.AddReg
+CopyFiles=OVT.Setting.CopyFiles, OVT.USBDCam511P.2000, 
+
+;*********************************************************************
+[OVT.DelReg]
+HKLM,"Software\Omnivision"
+HKLM,"System\CurrentControlSet\Control\MediaResources\msvideo\MSVideo.OVFWWDM"
+HKLM,"System\CurrentControlSet\Control\MediaResources\msvideo\MSVideo.CVFWWDM"
+HKLM,"System\CurrentControlSet\Control\MediaResources\msvideo\MSVideo.OVTCAM"
+HKLM,"Software\OVTUsbCamera\DeviceName"
+
+[OVT.STI.DeviceData]
+;SpecialInfo="My very special information"
+
+[OVT.USBDCam511P.AddReg]
+HKR,,HardwareConfig,1,1
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,M01USB.sys
+HKR,,OkToHibernate,3,01
+;
+;  Custome Property Interface
+;
+HKCR,CLSID\{F39E07C0-7D67-11D3-83FC-0050047A963E} ,,,"Olympus M01 Microscope Digital Camera"
+HKCR,CLSID\{F39E07C0-7D67-11D3-83FC-0050047A963E}\InProcServer32,,,M01EXT.ax
+HKCR,CLSID\{F39E07C0-7D67-11D3-83FC-0050047A963E}\InProcServer32,ThreadingModel,,"Both"
+;
+; CLSID_VideoProcAmp Property Page
+HKCR,CLSID\{30af8142-7b74-11d3-b0ea-0060974cffd9},,,%PropPage_CustomVideoProcAmp%
+HKCR,CLSID\{30af8142-7b74-11d3-b0ea-0060974cffd9}\InprocServer32,,,M01EXT.ax
+HKCR,CLSID\{30af8142-7b74-11d3-b0ea-0060974cffd9}\InprocServer32,ThreadingModel,,Both
+
+; CLSID_CameraControl Property Page
+HKCR,CLSID\{30af8145-7b74-11d3-b0ea-0060974cffd9},,,%PropPage_CustomCameraControl%
+HKCR,CLSID\{30af8145-7b74-11d3-b0ea-0060974cffd9}\InprocServer32,,,M01EXT.ax
+HKCR,CLSID\{30af8145-7b74-11d3-b0ea-0060974cffd9}\InprocServer32,ThreadingModel,,Both
+;
+; Associate the property set with the property page
+HKLM,System\CurrentControlSet\Control\MediaSets\{F39E07C0-7D67-11D3-83FC-0050047A963E}\PropertyPages\{30af8142-7b74-11d3-b0ea-0060974cffd9},,,%PropPage_CustomVideoProcAmp%
+HKLM,System\CurrentControlSet\Control\MediaSets\{F39E07C0-7D67-11D3-83FC-0050047A963E}\PropertyPages\{30af8145-7b74-11d3-b0ea-0060974cffd9},,,%PropPage_CustomCameraControl%
+;
+[OVT.USBDCam511P.BasicSetting]
+HKR,%CamSet%, EnableSystem, 1, 53,1,FF
+HKR,%CamSet%, DisableSystem, 1, 53,0,FF
+HKR,%CamSet%, ResetUsb, 1, 50,40,FF, 53,01,FF, 50,3f,ff, 53,01,FF, 50,0,ff
+HKR,%CamSet%, SetUsbInit, 1, 50,3D,FF
+HKR,%CamSet%, SetUsbWork, 1, 50,3f,ff, 50,0,ff
+HKR,%CamSet%, BandwidthAllocateRule, 0x10001, 0
+HKR,%CamSet%, FileDir,, \DosDevices\%10%\OvtCam
+
+
+[OVT.511P.AddReg]
+HKR,%CamSet%\CamSettingFiles,7610p,,7610p.set
+HKR,%CamSet%, IdleAltSetting, 0x10001, 0x0
+
+[OVT.2000.AddReg]
+;The path must consist with LegencyPath setting in each .SET file.
+;HKR,%76BGDP%,LegencyPath,,\Registry\Machine\Software\OmniVision\PC Camera
+;HKLM,"Software\OmniVision\PC Camera","PushModeEvent",,"Enable"
+
+[OVT.USBDCam511P.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,OVT.USBDCam511P.Interface
+
+[OVT.USBDCam511P.NT.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,OVT.USBDCam511P.Interface
+
+[OVT.USBDCam511P.Interface]
+AddReg=OVT.USBDCam511P.Intf.AddReg
+         
+[OVT.USBDCam511P.Intf.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%USB\VID_05A9&PID_A511.DeviceDesc%
+HKR,,ExtensionDLL,,%Ovt.ExtensionDLL%
+
+[OVT.USBDCam511P.NT.Services]
+AddService = OVT511Plus,0x00000002,OVT.USBDCam511P.ServiceInstall
+
+[OVT.USBDCam511P.ServiceInstall]
+DisplayName   = %USB\VID_05A9&PID_A511.DeviceDesc%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_DEMAND_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %10%\System32\Drivers\M01USB.sys
+
+
+
+[OVT.STI.CopyFiles]
+M01EXT.dll,,,4 
+M01EXT.ax,,,4 
+
+[OVT.USBDCam511P.Files]
+M01USB.sys,,,4 
+M01CAMD.sys,,,4 
+;stream.sys,,,4  ;; add for win98(se)
+
+[OVT.USBDCam511P.2000]
+M01USB.sys,,,4 
+M01CAMD.sys,,,4 
+
+[OVT.Setting.CopyFiles]
+7610p.set,,,4
+
+[SourceDisksNames]
+1="OLYMPUS(R) MICROSCOPE DIGITAL CAMERA Disk",,,
+
+[SourceDisksFiles]
+M01CAMD.sys=1
+M01USB.sys=1
+M01EXT.dll=1
+M01EXT.ax=1
+7610p.set=1
+
+[Strings]
+
+ProxyVCap.CLSID="{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+SERVICE_KERNEL_DRIVER=1
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1
+
+; IHV's extension DLL
+OVT.ExtensionDLL = "M01EXT.dll"
+
+SWMfg="Olympus"
+
+HWMfg="OLYMPUS OPTICAL CO., LTD."
+USB\VID_05A9&PID_A511.DeviceDesc="OLYMPUS(R) M01 MICROSCOPE DIGITAL CAMERA SYSTEM"
+CamSet="CameraSetting"
+PropPage_CustomVideoProcAmp= "Custom VideoProcAmp Property Page"
+PropPage_CustomCameraControl= "Custom CameraControl Property Page"
+511plus="Olympus M01 Microscope Digital Camera"
